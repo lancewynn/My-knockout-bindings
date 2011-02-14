@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+	<title>index</title>
+	<script src="/scripts/jquery-1.4.4.min.js" type="text/javascript"></script>
+	<script src="/scripts/knockout-latest-debug.js" type="text/javascript"></script>
+	<script src="/scripts/knockout.lancew.dataContext.js" type="text/javascript"></script>
+</head>
+<body>
+	<script type="text/javascript">
+
+
+		var viewModel =
+                {
+                	arrayList: ko.observableArray([]),
+                	addItem: function () {
+                		var idx = this.arrayList().length;
+                		this.arrayList.push({ id: ko.observable(idx), value: ko.observable("new row: " + idx) });
+                	},
+                	removeItem: function () {
+                		this.arrayList.pop();
+                	}
+                };
+
+		for (var i = 0; i < 5000; i++) {
+			viewModel.arrayList.push({
+				id: ko.observable(i),
+				value: ko.observable("record " + i + " value")
+			});
+		}
+
+		$(function () {
+			ko.applyBindings(viewModel);
+		});
+
+	</script>
+	<input type="button" value="Add Item" data-bind="click: addItem" />
+	<input type="button" value="delete Item" data-bind="click: removeItem" />
+	<div data-bind="pagedArray: arrayList, pagedArrayOptions:{itemsPerPage: 8, nearbyPageRage: 10, startPage: 5}">
+		<div>
+			Items Per Page:
+			<input type="text" data-bind="value: itemsPerPage" />
+			Nearby Page Range:
+			<input type="text" data-bind="value: nearbyPageRange" />
+		</div>
+		<table>
+		<thead>
+			<tr><th>id</th><th>value</th><th></tr>
+		</thead>
+		<tbody data-template="itemTemplate">
+		<tr >
+			<td><input type="text" data-bind="value: id" /></td></td><td><input type="text" data-bind="value: value" /></td>
+		</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<th colspan="2">
+					<a href="#" data-bind="visible: hasPreviousPage, click: firstPage">first</a> 
+					<a href="#" data-bind="visible: hasPreviousPage, click: previousPage">prev</a>
+					Page <input type="text" data-bind="value: page" style="width:40px" /> of (<span data-bind="text:pageCount"></span>) 
+					<a href="#" data-bind="visible: hasNextPage, click: nextPage">next</a> 
+					<a href="#" data-bind="visible: hasNextPage, click: lastPage">last</a>
+				</th>
+			</tr>
+			<tr>
+				<td colspan="2" data-bind="each: nearbyPages">
+					<span>
+						<a href="#" data-bind="text: pageNumber, click: show, style: {fontWeight: isCurrentPage ? 900: 400, color: isCurrentPage ? 'red' : ''}"></a>
+					</span><span>&nbsp;</span>
+				</td>
+			</tr>
+
+		</tfoot>
+		</table>
+	</div>
+	<br />
+	<br />
+</body>
+</html>
