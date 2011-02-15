@@ -201,7 +201,6 @@ ko.bindingHandlers.dynamicDataContext = {
 	}
 };
 
-
 ko.bindingHandlers.pagedArray = {
 	init: function (element, valueAccessor, allBindingAccessors) {
 
@@ -215,9 +214,9 @@ ko.bindingHandlers.pagedArray = {
 		
 		attachPagedArrayBehavior(value, element, options);
 
-		var itemTemplate = element.find("[data-template=itemTemplate]").html();
+		var itemTemplate = element.find("[data-template=itemTemplate]").first().html();
 		element.find("[data-template=itemTemplate] [data-bind]").attr('data-bind', '');
-		element.find("[data-template=itemTemplate]").html('');
+		element.find("[data-template=itemTemplate]").first().html('');
 
 		var config = {
 			template: element.html(),
@@ -266,7 +265,7 @@ ko.bindingHandlers.pagedArray = {
 						//set it as an object to allow us to bind to it.
 						item = { value: item };
 					}
-					var listContainer = element.find("[data-template=itemTemplate]");
+					var listContainer = element.find("[data-template=itemTemplate]").first();
 
 					var listItemTemplate = $(config.itemTemplate);
 					//this.element.html(this.template);

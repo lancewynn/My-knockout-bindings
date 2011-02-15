@@ -8,8 +8,6 @@
 </head>
 <body>
 	<script type="text/javascript">
-
-
 		var viewModel =
                 {
                 	arrayList: ko.observableArray([]),
@@ -25,8 +23,18 @@
 		for (var i = 0; i < 5000; i++) {
 			viewModel.arrayList.push({
 				id: ko.observable(i),
-				value: ko.observable("record " + i + " value")
+				value: ko.observable("record " + i + " value"),
+				innerArray: ko.observableArray(getInnerArray())
 			});
+		};
+
+		function getInnerArray() {
+			var innerArray = [];
+			for (var i = 0; i < 10; i++) {
+				innerArray.push({ id: i, text: "innerArray: " + i });
+			}
+			return innerArray;
+
 		}
 
 		$(function () {
@@ -34,46 +42,68 @@
 		});
 
 	</script>
-	<input type="button" value="Add Item" data-bind="click: addItem" />
-	<input type="button" value="delete Item" data-bind="click: removeItem" />
-	<div data-bind="pagedArray: arrayList, pagedArrayOptions:{itemsPerPage: 8, nearbyPageRage: 10, startPage: 5}">
-		<div>
-			Items Per Page:
-			<input type="text" data-bind="value: itemsPerPage" />
-			Nearby Page Range:
-			<input type="text" data-bind="value: nearbyPageRange" />
-		</div>
-		<table>
-		<thead>
-			<tr><th>id</th><th>value</th><th></tr>
-		</thead>
-		<tbody data-template="itemTemplate">
-		<tr >
-			<td><input type="text" data-bind="value: id" /></td></td><td><input type="text" data-bind="value: value" /></td>
-		</tr>
-		</tbody>
-		<tfoot>
-			<tr>
-				<th colspan="2">
-					<a href="#" data-bind="visible: hasPreviousPage, click: firstPage">first</a> 
-					<a href="#" data-bind="visible: hasPreviousPage, click: previousPage">prev</a>
-					Page <input type="text" data-bind="value: page" style="width:40px" /> of (<span data-bind="text:pageCount"></span>) 
-					<a href="#" data-bind="visible: hasNextPage, click: nextPage">next</a> 
-					<a href="#" data-bind="visible: hasNextPage, click: lastPage">last</a>
-				</th>
-			</tr>
-			<tr>
-				<td colspan="2" data-bind="each: nearbyPages">
-					<span>
-						<a href="#" data-bind="text: pageNumber, click: show, style: {fontWeight: isCurrentPage ? 900: 400, color: isCurrentPage ? 'red' : ''}"></a>
-					</span><span>&nbsp;</span>
-				</td>
-			</tr>
+    <input type="button" value="Add Item" data-bind="click: addItem" />
+    <input type="button" value="delete Item" data-bind="click: removeItem" />
+<!--    <div data-bind="pagedArray: arrayList, pagedArrayOptions:{itemsPerPage: 8, nearbyPageRage: 10, startPage: 5}">
+        <div>
+            Items Per Page:
+            <input type="text" data-bind="value: itemsPerPage" />
+            Nearby Page Range:
+            <input type="text" data-bind="value: nearbyPageRange" />
+        </div>
+        <table>
+        <thead>
+            <tr><th>id</th><th>value</th><th></tr>
+        </thead>
+        <tbody data-template="itemTemplate">
+        <tr >
+            <td><input type="text" data-bind="value: id" /></td></td><td><input type="text" data-bind="value: value" /></td>
+        </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="2">
+                    <a href="#" data-bind="visible: hasPreviousPage, click: firstPage">first</a> 
+                    <a href="#" data-bind="visible: hasPreviousPage, click: previousPage">prev</a>
+                    Page <input type="text" data-bind="value: page" style="width:40px" /> of (<span data-bind="text:pageCount"></span>) 
+                    <a href="#" data-bind="visible: hasNextPage, click: nextPage">next</a> 
+                    <a href="#" data-bind="visible: hasNextPage, click: lastPage">last</a>
+                </th>
+            </tr>
+            <tr>
+                <td colspan="2" data-bind="each: nearbyPages">
+                    <span>
+                        <a href="#" data-bind="text: pageNumber, click: show, style: {fontWeight: isCurrentPage ? 900: 400, color: isCurrentPage ? 'red' : ''}"></a>
+                    </span><span>&nbsp;</span>
+                </td>
+            </tr>
 
-		</tfoot>
-		</table>
-	</div>
-	<br />
-	<br />
+        </tfoot>
+        </table>
+    </div>
+    -->
+    
+    <div data-bind="pagedArray: arrayList, pagedArrayOptions:{itemsPerPage: 5, nearbyPageRage: 5, startPage: 1}">
+        <ul data-template="itemTemplate">
+            <li>outer Array: <span data-bind="text:id"></span>
+                <div data-bind="pagedArray: innerArray, pagedArrayOptions: {itemsPerPage: 2, nearbyPageRange: 5, startPage:1}">
+                    <ul data-template="itemTemplate">
+                        <li>innerId: <span data-bind="text: id"></span></li>
+                    </ul>
+						<a href="#" data-bind="visible: hasPreviousPage, click: firstPage">first</a> 
+						<a href="#" data-bind="visible: hasPreviousPage, click: previousPage">prev</a>
+						Page <span data-bind="text: page" style="width:40px"></span> of (<span data-bind="text:pageCount"></span>) 
+						<a href="#" data-bind="visible: hasNextPage, click: nextPage">next</a> 
+						<a href="#" data-bind="visible: hasNextPage, click: lastPage">last</a>
+                </div>
+            </li>
+        </ul>
+        <a href="#" data-bind="visible: hasPreviousPage, click: firstPage">first</a> 
+        <a href="#" data-bind="visible: hasPreviousPage, click: previousPage">prev</a>
+        Page <span data-bind="text: page" style="width:40px"></span> of (<span data-bind="text:pageCount"></span>) 
+        <a href="#" data-bind="visible: hasNextPage, click: nextPage">next</a> 
+        <a href="#" data-bind="visible: hasNextPage, click: lastPage">last</a>
+
+    </div>
 </body>
 </html>
